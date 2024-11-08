@@ -1,12 +1,11 @@
 services:
   - type: web
-    name: podcast-generator
+    plan: free
+    name: podcastfy-ui
     runtime: python
     buildCommand: |
-      pip install pipenv
-      pipenv install --deploy --ignore-pipfile
-    startCommand: pipenv run gunicorn app:app
-    plan: free
+      pip install -r requirements.txt
+    startCommand: gunicorn app:app
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.5
