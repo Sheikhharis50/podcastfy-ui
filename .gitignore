@@ -3,6 +3,8 @@
 # Ignore environment variables
 .env
 
+venv/
+
 # Ignore configuration files
 config.yaml
 
