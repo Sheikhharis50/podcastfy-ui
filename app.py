@@ -22,7 +22,7 @@ def index():
         print(f"{text=}")
         print(f"{urls=}")
 
-        payload: dict[str, Any] = {"transcript_only": False}
+        payload: dict[str, Any] = {"transcript_only": True}
         if text:
             payload["text"] = text
         if urls:
