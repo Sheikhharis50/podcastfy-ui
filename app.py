@@ -8,7 +8,7 @@ from podcastfy.client import generate_podcast
 # Load environment variables from .env file
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static", template_folder="templates")
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 
@@ -16,7 +16,6 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 def index():
     if request.method == "POST":
         urls = request.form.get("urls", "").split(",")
-        print(f"{urls=}")
 
         try:
             transcript_file = generate_podcast(
@@ -28,10 +27,6 @@ def index():
                 tts_model="elevenlabs",
             )
 
-            # Check if result is a string (error message) or dict (success)
-            if isinstance(result, str):
-                return jsonify({"error": result}), 400
-
             # Create static/audio directory if it doesn't exist
             os.makedirs(os.path.join(app.static_folder, "audio"), exist_ok=True)
 
@@ -40,7 +35,7 @@ def index():
             static_file_path = os.path.join(app.static_folder, "audio", filename)
 
             # Copy the generated file to static location
-            shutil.copy2(result.audio_path, static_file_path)
+            shutil.copy2(result, static_file_path)
 
             return jsonify(
                 {
