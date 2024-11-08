@@ -1,5 +1,6 @@
 import os
 import shutil
+from typing import Any
 
 from dotenv import load_dotenv
 from flask import Flask, jsonify, render_template, request, send_file
@@ -15,13 +16,21 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        urls = request.form.get("urls", "").split(",")
+        text = request.form.get("text", None)
+        urls = list(filter(None, request.form.get("urls", "").split(",")))
+
+        print(f"{text=}")
+        print(f"{urls=}")
+
+        payload: dict[str, Any] = {"transcript_only": False}
+        if text:
+            payload["text"] = text
+        if urls:
+            payload["urls"] = urls
 
         try:
-            transcript_file = generate_podcast(
-                urls=urls,
-                transcript_only=True,
-            )
+
+            transcript_file = generate_podcast(**payload)
             result = generate_podcast(
                 transcript_file=transcript_file,
                 tts_model="elevenlabs",
