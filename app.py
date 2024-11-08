@@ -21,6 +21,9 @@ def index():
 
         print(f"{text=}")
         print(f"{urls=}")
+        print(f"{os.environ.get('ELEVENLABS_API_KEY')=}")
+        print(f"{os.environ.get('GEMINI_API_KEY')=}")
+        print(f"{os.environ.get('OPENAI_API_KEY')=}")
 
         payload: dict[str, Any] = {"transcript_only": True}
         if text:
@@ -29,7 +32,6 @@ def index():
             payload["urls"] = urls
 
         try:
-
             transcript_file = generate_podcast(**payload)
             result = generate_podcast(
                 transcript_file=transcript_file,
