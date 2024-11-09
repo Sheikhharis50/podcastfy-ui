@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.11-slim as base
+FROM python:3.11-slim AS base
 
 # Set environment variables for Python to prevent writing .pyc files and enable unbuffered output
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -30,7 +30,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app
 
 # Use a multi-stage build to reduce image size
-FROM base as final
+FROM base AS final
 
 # Copy the virtual environment from the base image
 COPY --from=base /opt/venv /opt/venv
